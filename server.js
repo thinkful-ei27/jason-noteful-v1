@@ -23,3 +23,9 @@ app.listen(8080, function() {
 app.get('/api/notes', (req, res) => {
     res.json(data);
 });
+
+
+app.get('/api/notes/:id', (req, res) => {
+    console.log(req.params);
+    res.json(data.find(item => item.id === Number(req.params.id)));
+});
