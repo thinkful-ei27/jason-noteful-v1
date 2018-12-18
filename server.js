@@ -3,23 +3,15 @@
 // Load array of notes
 const data = require('./db/notes');
 
+const { PORT } = require('./db/config');
+console.log(PORT);
 console.log('Hello Noteful!');
+//const logger = require('./db/middleware/logger');
 
 // INSERT EXPRESS APP CODE HERE...
 const express = require('express');
 
-// const data = require('./db/notes');
-
 const app = express();
-
-// STATIC SERVER
-
-app.listen(8080, function() {
-    console.info('server listening on ${this.address().port}');
-}).on('error', err => {
-    console.error(err);
-});
-
 
 app.get('/api/notes', (req, res) => {
     if (req.query.searchTerm) {
@@ -34,4 +26,11 @@ app.get('/api/notes', (req, res) => {
 app.get('/api/notes/:id', (req, res) => {
     console.log(req.params);
     res.json(data.find(item => item.id === Number(req.params.id)));
+});
+
+// STATIC SERVER
+app.listen(PORT, function() {
+    console.info('server listening on ${this.address().port}');
+}).on('error', err => {
+    console.error(err);
 });
