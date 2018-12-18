@@ -2,6 +2,8 @@
 
 // Load array of notes
 const data = require('./db/notes');
+const simDB = require('./db/simDB');
+const notes = simDB.initialize(data);
 const { PORT } = require('./db/config');
 console.log('Hello Noteful!');
 const logger = require('./db/middleware/logger');
@@ -10,9 +12,7 @@ const logger = require('./db/middleware/logger');
 
 // INSERT EXPRESS APP CODE HERE...
 const express = require('express');
-
 const app = express();
-
 
  // LOGGER MIDDLEWARE
 app.use(logger);
