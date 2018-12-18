@@ -16,13 +16,11 @@ const app = express();
 
  // LOGGER MIDDLEWARE
 app.use(logger);
-app.get('/api/notes', (req, res) => {
-    if (req.query.searchTerm) {
-        const searchTerm = req.query.searchTerm;
-        const resData = data.filter(item => item.title.includes(searchTerm));
-        
-        res.json(resData);
-    } else res.json(data);
+// STATIC SERVER
+app.listen(PORT, function() {
+    console.info('server listening on ${this.address().port}');
+}).on('error', err => {
+    console.error(err);
 });
 
 // HANDLE GET REQUESTS
@@ -36,6 +34,22 @@ app.get('/api/notes/', (req, res, next) => {
         res.json(list); // responds with filtered array
     });
 });
+
+app.get('/api/notes/:id', (req, res, next) => {
+    const id = (req.params.id);
+    notes.find(id, (err, item) => {
+        if (err) {
+          return next(err); // goes to error handler
+        };
+        if (item) {
+        res.json(item);
+        } else {
+            next();
+        }
+    });
+});
+
+
 
 //ERROR HANDLER
 app.use(function (req, res, next) {
@@ -52,9 +66,3 @@ app.use(function (req, res, next) {
     });
   });
 
-// STATIC SERVER
-app.listen(PORT, function() {
-    console.info('server listening on ${this.address().port}');
-}).on('error', err => {
-    console.error(err);
-});
