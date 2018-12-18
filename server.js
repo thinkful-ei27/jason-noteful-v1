@@ -26,9 +26,15 @@ app.get('/api/notes', (req, res) => {
 });
 
 // HANDLE GET REQUESTS
-app.get('/api/notes/:id', (req, res) => {
-    console.log(req.params);
-    res.json(data.find(item => item.id === Number(req.params.id)));
+app.get('/api/notes/', (req, res, next) => {
+    const { searchTerm } = req.query;
+
+    notes.filter(searchTerm, (err, list) => {
+        if (err) {
+          return next(err); // goes to error handler
+        }
+        res.json(list); // responds with filtered array
+    });
 });
 
 //ERROR HANDLER
