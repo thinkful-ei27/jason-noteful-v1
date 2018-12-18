@@ -3,7 +3,6 @@
 // Load array of notes
 const data = require('./db/notes');
 const { PORT } = require('./db/config');
-console.log(PORT);
 console.log('Hello Noteful!');
 const logger = require('./db/middleware/logger');
 
@@ -13,13 +12,9 @@ const logger = require('./db/middleware/logger');
 const express = require('express');
 
 const app = express();
-// STATIC SERVER
-app.listen(PORT, function() {
-    console.info('server listening on ${this.address().port}');
-}).on('error', err => {
-    console.error(err);
-});
 
+
+ // LOGGER MIDDLEWARE
 app.use(logger);
 app.get('/api/notes', (req, res) => {
     if (req.query.searchTerm) {
@@ -30,9 +25,30 @@ app.get('/api/notes', (req, res) => {
     } else res.json(data);
 });
 
-
+// HANDLE GET REQUESTS
 app.get('/api/notes/:id', (req, res) => {
     console.log(req.params);
     res.json(data.find(item => item.id === Number(req.params.id)));
 });
 
+//ERROR HANDLER
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    res.status(404).json({ message: 'Not Found' });
+  });
+
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.json({
+      message: err.message,
+      error: err
+    });
+  });
+
+// STATIC SERVER
+app.listen(PORT, function() {
+    console.info('server listening on ${this.address().port}');
+}).on('error', err => {
+    console.error(err);
+});
