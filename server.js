@@ -4,9 +4,9 @@
 const data = require('./db/notes');
 const simDB = require('./db/simDB');
 const notes = simDB.initialize(data);
-const { PORT } = require('./db/config');
+const { PORT } = require('./config');
 console.log('Hello Noteful!');
-const logger = require('./db/middleware/logger');
+const logger = require('./middleware/logger');
 
 
 
@@ -16,12 +16,6 @@ const app = express();
 
  // LOGGER MIDDLEWARE
 app.use(logger);
-// STATIC SERVER
-app.listen(PORT, function() {
-    console.info('server listening on ${this.address().port}');
-}).on('error', err => {
-    console.error(err);
-});
 
 // HANDLE GET REQUESTS
 app.get('/api/notes/', (req, res, next) => {
@@ -66,3 +60,9 @@ app.use(function (req, res, next) {
     });
   });
 
+// STATIC SERVER
+app.listen(PORT, function() {
+    console.info(`server listening on ${this.address().port}`);
+}).on('error', err => {
+    console.error(err);
+});
