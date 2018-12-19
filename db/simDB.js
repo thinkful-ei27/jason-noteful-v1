@@ -31,7 +31,7 @@ const simDB = {
   filter: function (term, callback) {
     setTimeout(() => {
       try {
-        let list = term ? this.data.filter(item => item.name.includes(term)) : this.data;
+        let list = term ? this.data.filter(item => item.title.includes(term)) : this.data;
         callback(null, list);
       } catch (err) {
         callback(err);
