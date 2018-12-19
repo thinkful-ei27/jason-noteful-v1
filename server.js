@@ -5,8 +5,9 @@ const data = require('./db/notes');
 const simDB = require('./db/simDB');
 const notes = simDB.initialize(data);
 const { PORT } = require('./config');
+const morgan = require('morgan');
 console.log('Hello Noteful!');
-const logger = require('./middleware/logger');
+
 
 
 
@@ -15,7 +16,9 @@ const express = require('express');
 const app = express();
 
  // LOGGER MIDDLEWARE
-app.use(logger);
+
+ app.use(morgan(':method :url :status :response-time ms - :res[content-length]e'));
+
 
 // Create a static webserver
 app.use(express.static('public'));
