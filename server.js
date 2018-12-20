@@ -1,19 +1,42 @@
 'use strict';
 
 const express = require('express');
-const { PORT } = require('./config');
 const morgan = require('morgan');
-const router = require('./router/notes.router');
+const { PORT } = require('./config');
+const notesRouter = require('./router/notes.router');
+
 console.log('Hello Noteful!');
 const app = express();
+
+// LOGGER MIDDLEWARE
+app.use(morgan('dev'));
 
 // Create a static webserver
 app.use(express.static('public'));
 
- // LOGGER MIDDLEWARE
- app.use(morgan(':method :url :status :response-time ms - :res[content-length]e'));
 
- app.use(router);
+app.use(express.json());
+
+app.use('/api', notesRouter);
+
+//// Catch-all 404
+//app.use(function (req, res, next) {
+//    const err = new Error('Not Found');
+//    err.status = 404;
+//    next(err);
+//  });
+//  
+//  // Catch-all Error handler
+//  // NOTE: we'll prevent stacktrace leak in later exercise
+//  app.use(function (err, req, res, next) {
+//    res.status(err.status || 500);
+//    res.json({
+//      message: err.message,
+//      error: err
+//    });
+//  });
+//
+//
 app.listen(PORT, function() {
     console.info(`server listening on ${this.address().port}`);
 }).on('error', err => {

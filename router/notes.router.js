@@ -1,4 +1,7 @@
+'use strict';
+
 const express = require('express');
+
 const router = express.Router();
 
 const data = require('../db/notes');
@@ -10,7 +13,7 @@ const notes = simDB.initialize(data);
 router.use(express.json());
 
 // HANDLE GET REQUESTS
-router.get('/api/notes/', (req, res, next) => {
+router.get('/notes/', (req, res, next) => {
     const { searchTerm } = req.query;
 
     notes.filter(searchTerm, (err, list) => {
@@ -21,7 +24,7 @@ router.get('/api/notes/', (req, res, next) => {
     });
 });
 
-router.get('/api/notes/:id', (req, res, next) => {
+router.get('/notes/:id', (req, res, next) => {
     const id = (req.params.id);
     notes.find(id, (err, item) => {
         if (err) {
@@ -36,7 +39,7 @@ router.get('/api/notes/:id', (req, res, next) => {
 });
 
 // PUT NOTES
-router.put('/api/notes/:id', (req, res, next) => {
+router.put('/notes/:id', (req, res, next) => {
     const id = req.params.id;
   
     /***** Never trust users - validate input *****/
