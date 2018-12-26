@@ -37,8 +37,11 @@ app.use('/api', notesRouter);
 //  });
 //
 //
-app.listen(PORT, function() {
-    console.info(`server listening on ${this.address().port}`);
-}).on('error', err => {
-    console.error(err);
-});
+if(require.main===module) {
+    app.listen(PORT, function() {
+        console.info(`server listening on ${this.address().port}`);
+    }).on('error', err => {
+        console.error(err);
+    })
+};
+module.exports = app; // export for testing
